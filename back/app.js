@@ -4,9 +4,13 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+require('dotenv').config();
+
+var pool = require('./models/bd')
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var contactoRouter = require('./routes/contacto');
+
 
 var app = express();
 
@@ -23,16 +27,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
-app.use('/contacto', contactoRouter);
+/*consulta*/
 
-
-app.get('/promociones', function (req,res) {
-  res.send('En esta pagina podras ver nuestras promociones del mes')  
-})
-
-app.get('/novedades', function (req,res) {
-  res.send('En esta pagina podras ver los ingresos y novedades del mes')  
-})
+pool.query('select * from empleados').then(function (resultados){
+  console.log(resultados)
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
